@@ -16,15 +16,17 @@ body{
     transition:1s;
 }
 
+/* card */
 .card{
     background:white;
     padding:40px;
     border-radius:20px;
     text-align:center;
     box-shadow:0 10px 30px rgba(0,0,0,0.1);
-    z-index:5;
+    z-index:10;
 }
 
+/* buttons */
 button{
     padding:15px 30px;
     border:none;
@@ -38,22 +40,24 @@ button{
 #yesBtn{ background:#ff2e74; color:white; }
 #noBtn{ background:#ffd1df; }
 
+/* floating hearts */
+.floatHeart{
+    position:absolute;
+    color:#ff2e74;
+    animation: float 6s linear infinite;
+}
+
+@keyframes float{
+    from{ transform:translateY(100vh); }
+    to{ transform:translateY(-10vh); opacity:0; }
+}
+
 #final{
     display:none;
-    font-size:40px;
+    font-size:45px;
     color:white;
     font-weight:bold;
-}
-
-.heart{
-    position:absolute;
-    color:white;
-    animation: explode 2s linear forwards;
-}
-
-@keyframes explode{
-    0%{ transform:translate(0,0); opacity:1; }
-    100%{ transform:translate(var(--x),var(--y)); opacity:0; }
+    z-index:20;
 }
 </style>
 </head>
@@ -75,11 +79,11 @@ let noScale=1;
 const yes=document.getElementById("yesBtn");
 const no=document.getElementById("noBtn");
 
-/* hover */
+/* NO escape */
 no.onmouseover=()=>{
     no.style.position="absolute";
-    no.style.left=Math.random()*500+"px";
-    no.style.top=Math.random()*300+"px";
+    no.style.left=Math.random()*600+"px";
+    no.style.top=Math.random()*400+"px";
 
     noScale-=0.1;
     yesScale+=0.15;
@@ -92,37 +96,49 @@ no.onmouseover=()=>{
 yes.onclick=()=>{
     document.body.style.background="linear-gradient(45deg,#ff2e74,#ff6fa5)";
     document.getElementById("card").style.display="none";
-    const final=document.getElementById("final");
-    final.style.display="block";
+
+    const f=document.getElementById("final");
+    f.style.display="block";
     typeText();
-    explodeHearts();
+    explode();
 };
 
 /* typing */
 function typeText(){
-    const text="I Love You ❤️";
+    const txt="I Love You ❤️";
     let i=0;
     const t=setInterval(()=>{
-        document.getElementById("final").innerHTML+=text[i];
+        document.getElementById("final").innerHTML+=txt[i];
         i++;
-        if(i>=text.length) clearInterval(t);
+        if(i>=txt.length) clearInterval(t);
     },100);
 }
 
-/* heart explosion */
-function explodeHearts(){
+/* explosion hearts */
+function explode(){
     for(let i=0;i<40;i++){
         const h=document.createElement("div");
-        h.className="heart";
         h.innerHTML="💖";
+        h.style.position="absolute";
         h.style.left="50%";
         h.style.top="50%";
-        h.style.setProperty('--x',(Math.random()*600-300)+"px");
-        h.style.setProperty('--y',(Math.random()*600-300)+"px");
+        h.style.fontSize="30px";
+        h.style.transform=`translate(${Math.random()*600-300}px,${Math.random()*600-300}px)`;
         document.body.appendChild(h);
-        setTimeout(()=>h.remove(),2000);
+        setTimeout(()=>h.remove(),1500);
     }
 }
+
+/* background floating hearts */
+setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="floatHeart";
+    h.innerHTML="💖";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(20+Math.random()*20)+"px";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+},400);
 </script>
 
 </body>
